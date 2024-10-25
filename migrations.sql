@@ -1,0 +1,28 @@
+CREATE TABLE spareparts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE storages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    parent INT NULL,
+    FOREIGN KEY (parent) REFERENCES storages(id) ON DELETE CASCADE,
+    UNIQUE (name, parent),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE storage_spareparts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    storage INT NOT NULL,
+    sparepart INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 0,
+    comments TEXT,
+    FOREIGN KEY (storage) REFERENCES storages(id) ON DELETE CASCADE,
+    FOREIGN KEY (sparepart) REFERENCES spareparts(id) ON DELETE CASCADE,
+    UNIQUE (storage, sparepart)
+);
